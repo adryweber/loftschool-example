@@ -73,6 +73,13 @@ function returnCounter(number = 0) {
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 function returnArgumentsArray() {
+    var arr = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+        arr[i] = arguments[i];
+    }
+
+    return arr;
 }
 
 /*
