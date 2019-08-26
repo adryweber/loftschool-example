@@ -81,6 +81,10 @@ function returnArgumentsArray() {
 
     return arr;
 }
+// Более краткий вариант
+// function returnArgumentsArray(...args) {
+//     return args;
+// }
 
 /*
  Задание 6 *:
@@ -110,6 +114,11 @@ function bindFunction() {
 
     return () => result;
 }
+
+// Более краткий вариант.
+// function bindFunction(fn, ...valuesArr) {
+//     return () => fn(...valuesArr);
+// }
 
 export {
     returnFirstArgument,
