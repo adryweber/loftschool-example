@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* ДЗ 2 - работа с массивами и объектами */
 
 /*
@@ -7,15 +8,13 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
-    let result = [];
+    // let result = [];
     
     for (let i=0; i < array.length; i++ ) {
-        result.push(fn(array[i], i, array));
+        fn(array[i], i, array)
+        // result.push(fn(array[i], i, array));
     }
-
-    // return result;
 }
-
 /*
  Задание 2:
 
@@ -70,14 +69,45 @@ function upperProps(obj) {
     return Object.keys(obj).map( (item) => item.toUpperCase() );
 }
 
-// /*
-//  Задание 5 *:
+/*
+ Задание 5 *:
 
-//  Напишите аналог встроенного метода slice для работы с массивами
-//  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
-//  */
-// function slice(array, from, to) {
-// }
+ Напишите аналог встроенного метода slice для работы с массивами
+ Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
+ */
+function slice(array, from = 0, to) {
+
+    let length = array.length;
+    
+    // Для положит.: 
+    // 1) Cтарт больше, чем конец или 
+    // 2) Старт больше, чем длинна массива. Улетаем.
+    if (((from + to) > 0 && from > to) || (from > 0 && from > length)) { 
+        return [];
+    }
+    
+    // 3) Если старт отриц. Если он больше длинны по модулю. Начинаем с нуля.
+    // 4) Если старт отриц., пересчитываем с конца
+    from = (from < 0 && Math.abs(from) > length) ? 0 : 
+        (from < 0) ? (length + from) : 
+            from;
+
+    // 5) Конец не задан (дефолт конца), приводим к длинне
+    // 6) Конец по модулю больше длинны - приводим к длинне по модулю
+    // 7) Если правый конец отрицательный, пересчитываем с конца массива
+    to = (to === undefined) ? length :
+        (Math.abs(to) > length) ? (Math.sign(to) * length) :
+            (to < 0) ? (length + to) : 
+                to;
+
+    let arrResult = [];
+
+    for (let i = from; i < to; i++) {
+        arrResult.push(array[i]);
+    }
+
+    return arrResult;
+}
 
 // /*
 //  Задание 6 *:
@@ -93,6 +123,6 @@ export {
     map,
     reduce,
     upperProps,
-    // slice,
+    slice,
     // createProxy
 };
