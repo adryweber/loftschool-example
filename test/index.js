@@ -10,7 +10,7 @@ import {
     reduce,
     upperProps,
     slice,
-    // createProxy
+    createProxy
 } from '../src/index';
 
 describe('ДЗ 3 - объекты и массивы', () => {
@@ -244,16 +244,16 @@ describe('ДЗ 3 - объекты и массивы', () => {
         });
     });
 
-    // describe('createProxy', () => {
-    //     it('должна вернуть Proxy, который возводит в квадрат любое записываемое значение', () => {
-    //         let obj = {};
+    describe('createProxy', () => {
+        it('должна вернуть Proxy, который возводит в квадрат любое записываемое значение', () => {
+            let obj = {};
 
-    //         obj = createProxy(obj);
+            obj = createProxy(obj);
 
-    //         obj.a = 2;
-    //         obj.b = 5;
+            obj.a = 2;
+            obj.b = 5;
 
-    //         assert.deepEqual(obj, { a: 4, b: 25 });
-    //     });
-    // });
+            assert.deepEqual(obj, { a: 4, b: 25 });
+        });
+    });
 });

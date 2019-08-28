@@ -109,14 +109,21 @@ function slice(array, from = 0, to) {
     return arrResult;
 }
 
-// /*
-//  Задание 6 *:
+/*
+ Задание 6 *:
 
-//  Функция принимает объект и должна вернуть Proxy для этого объекта
-//  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
-//  */
-// function createProxy(obj) {
-// }
+ Функция принимает объект и должна вернуть Proxy для этого объекта
+ Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
+ */
+function createProxy(obj) {
+    return new Proxy(obj, {
+        set(target, prop, val) {
+            target[prop] = val * val;
+
+            return true;
+        }
+    });
+}
 
 export {
     forEach,
@@ -124,5 +131,5 @@ export {
     reduce,
     upperProps,
     slice,
-    // createProxy
+    createProxy
 };
