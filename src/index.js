@@ -1,128 +1,156 @@
-/* eslint-disable no-nested-ternary */
-/* ДЗ 2 - работа с массивами и объектами */
+/* ДЗ 3 - работа с исключениями и отладчиком */
 
 /*
  Задание 1:
 
- Напишите аналог встроенного метода forEach для работы с массивами
- Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
+ 1.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
+ Функция должна вернуть true только если fn вернула true для всех элементов массива
+
+ 1.2: Необходимо выбрасывать исключение в случаях:
+   - array не массив или пустой массив (с текстом "empty array")
+   - fn не является функцией (с текстом "fn is not a function")
+
+ Зарпещено использовать встроенные методы для работы с массивами
+
+ Пример:
+   isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
+   isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
-function forEach(array, fn) {
-    // let result = [];
-    
-    for (let i=0; i < array.length; i++ ) {
-        fn(array[i], i, array)
-        // result.push(fn(array[i], i, array));
+function isAllTrue(array, fn) {
+    try {
+        if (!Array.isArray(array)) {
+            throw new Error('empty array');
+        }
+
+        if (array.length === 0) {
+            throw new Error('empty array');
+        }
+
+        if (typeof fn !== 'function') {
+            throw new Error('fn is not a function');
+        }
+        
+        for (let i = 0; i < array.length; i++) {
+            let r = fn(array[i]);
+            
+            if (r === false) {
+                return false;
+            }
+        }
+
+        return true;
+    } catch (err) {
+        throw err;
     }
 }
+
 /*
  Задание 2:
 
- Напишите аналог встроенного метода map для работы с массивами
- Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
- */
-function map(array, fn) {
-    let result = [];
-    
-    for (let i=0; i < array.length; i++ ) {
-        result.push(fn(array[i], i, array));
-    }
+ 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
+ Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
 
-    return result;
+ 2.2: Необходимо выбрасывать исключение в случаях:
+   - array не массив или пустой массив (с текстом "empty array")
+   - fn не является функцией (с текстом "fn is not a function")
+
+ Зарпещено использовать встроенные методы для работы с массивами
+
+ Пример:
+   isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true
+   isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
+ */
+function isSomeTrue(array, fn) {
+    try {
+        if (!Array.isArray(array)) {
+            throw new Error('empty array');
+        }
+
+        if (array.length === 0) {
+            throw new Error('empty array');
+        }
+
+        if (typeof fn !== 'function') {
+            throw new Error('fn is not a function');
+        }
+        
+        for (let i = 0; i < array.length; i++) {
+            let r = fn(array[i]);
+            
+            if (r === true) {
+                return true;
+            }
+        }
+
+        return false;
+    } catch (err) {
+        throw err;
+    }
 }
 
 /*
  Задание 3:
 
- Напишите аналог встроенного метода reduce для работы с массивами
- Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
+ 3.1: Функция принимает заранее неизветсное количество аргументов, первым из которых является функция fn
+ Функция должна поочередно запустить fn для каждого переданного аргумента (кроме самой fn)
+
+ 3.2: Функция должна вернуть массив аргументов, для которых fn выбросила исключение
+
+ 3.3: Необходимо выбрасывать исключение в случаях:
+   - fn не является функцией (с текстом "fn is not a function")
  */
-function reduce(array, fn, initial) {
-    let previousValue, start;
+function returnBadArguments(fn) {
+    let result = [];
 
-    if (initial !== undefined) {
-        previousValue = initial;
-        start = 0;
-    } else {
-        previousValue = array[0];
-        start = 1;
+    try {
+        if (typeof(fn) !== 'function') {
+            throw new Error('fn is not a function');
+        }
+
+        if (arguments.length === 1) {
+            return [];
+        }
+        
+        for (let i = 1; i < arguments.length; i++) {
+            try {
+                fn(arguments[i]);
+            } catch (err) {
+                result.push(arguments[i]);
+            } 
+        }
+
+        return result;
+
+    } catch (err) {
+        throw err;
     }
-
-    for (let i=start; i < array.length; i++) {
-        let current = fn(previousValue, array[i], i, array);
-
-        previousValue = current;
-    }
-
-    return previousValue;
 }
 
 /*
  Задание 4:
 
- Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистр и вернуть в виде массива
+ 4.1: Функция имеет параметр number (по умолчанию - 0)
 
- Пример:
-   upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
+ 4.2: Функция должна вернуть объект, у которого должно быть несколько методов:
+   - sum - складывает number с переданными аргументами
+   - dif - вычитает из number переданные аргументы
+   - div - делит number на первый аргумент. Результат делится на следующий аргумент (если передан) и так далее
+   - mul - умножает number на первый аргумент. Результат умножается на следующий аргумент (если передан) и так далее
+
+ Количество передаваемых в методы аргументов заранее неизвестно
+
+ 4.3: Необходимо выбрасывать исключение в случаях:
+   - number не является числом (с текстом "number is not a number")
+   - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function upperProps(obj) {
-    return Object.keys(obj).map( (item) => item.toUpperCase() );
+function calculator() {
 }
 
-/*
- Задание 5 *:
-
- Напишите аналог встроенного метода slice для работы с массивами
- Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
- */
-function slice(array, from = 0, to) {
-
-    let length = array.length;
-    
-    // Для положит.: 
-    // 1) Cтарт больше, чем конец или 
-    // 2) Старт больше, чем длинна массива. Улетаем.
-    if (((from + to) > 0 && from > to) || (from > 0 && from > length)) { 
-        return [];
-    }
-    
-    // 3) Если старт отриц. Если он больше длинны по модулю. Начинаем с нуля.
-    // 4) Если старт отриц., пересчитываем с конца
-    from = (from < 0 && Math.abs(from) > length) ? 0 : 
-        (from < 0) ? (length + from) : 
-            from;
-
-    // 5) Конец не задан (дефолт конца), приводим к длинне
-    // 6) Конец по модулю больше длинны - приводим к длинне по модулю
-    // 7) Если правый конец отрицательный, пересчитываем с конца массива
-    to = (to === undefined) ? length :
-        (Math.abs(to) > length) ? (Math.sign(to) * length) :
-            (to < 0) ? (length + to) : 
-                to;
-
-    let arrResult = [];
-
-    for (let i = from; i < to; i++) {
-        arrResult.push(array[i]);
-    }
-
-    return arrResult;
-}
-
-// /*
-//  Задание 6 *:
-
-//  Функция принимает объект и должна вернуть Proxy для этого объекта
-//  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
-//  */
-// function createProxy(obj) {
-// }
+/* При решении задач, пострайтесь использовать отладчик */
 
 export {
-    forEach,
-    map,
-    reduce,
-    upperProps,
-    slice,
-    // createProxy
+    isAllTrue,
+    isSomeTrue,
+    returnBadArguments,
+    // calculator
 };
