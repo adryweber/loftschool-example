@@ -143,7 +143,51 @@ function returnBadArguments(fn) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number = 0) {
+    try {
+        let result = number;
+
+        if (typeof number !== 'number') {
+            throw new Error('number is not a number');
+        }      
+        
+        return {
+            sum: function () {
+                for (let i=0; i<arguments.length; i++) {
+                    result = result + arguments[i];
+                }
+
+                return result;
+            },
+            dif: function () {
+                for (let i=0; i<arguments.length; i++) {
+                    result = result - arguments[i];
+                }
+
+                return result;
+            }, 
+            div: function () {
+                for (let i=0; i<arguments.length; i++) {
+                    if (arguments[i] === 0) {
+                        throw new Error('division by 0');
+                    }                     
+                    result = result / arguments[i];
+                }
+
+                return result;
+            },      
+            mul: function () {
+                for (let i=0; i<arguments.length; i++) {
+                    result = result * arguments[i];
+                }
+
+                return result;
+            },           
+        }
+    } catch (err) {
+        throw err;
+    }
+
 }
 
 /* При решении задач, пострайтесь использовать отладчик */
@@ -152,5 +196,5 @@ export {
     isAllTrue,
     isSomeTrue,
     returnBadArguments,
-    // calculator
+    calculator
 };
