@@ -54,15 +54,7 @@ function findAllPSiblings(where) {
     let res = [...where.children].filter( child => 
         child.nextElementSibling && child.nextElementSibling.nodeName === 'P'
     )
-
-    // Вариант через for of
-    // let res = [];
-    // for (var child of where.children) {
-    //     if (child.nextElementSibling && child.nextElementSibling.nodeName === 'P') {
-    //         res.push(child);
-    //     }
-    // }
-
+    
     return res;
 }
 
@@ -86,12 +78,6 @@ function findAllPSiblings(where) {
 function findError(where) {
     let result = [...where.children].map( child => child.innerText );
 
-    // Вариант через for of
-    // var result = [];
-    // for (var child of where.children) {
-    //     result.push(child.innerText);
-    // }
-
     return result;
 }
 
@@ -113,14 +99,6 @@ function deleteTextNodes(where) {
             where.removeChild(child);
         } 
     })
-
-    // let children = where.childNodes;
-    // for (let i=0; i < children.length; i++) {
-    //     if (children[i].nodeType === 3) {
-    //         where.removeChild(children[i]);
-    //         i--;
-    //     }
-    // }
 }
 
 /*
@@ -142,19 +120,6 @@ function deleteTextNodesRecursive(where) {
             deleteTextNodesRecursive(child);
         }
     })
-    
-    // Вариант с for
-    // for (let i=0; i<children.length; i++) {
-    //     let child = children[i];
-    
-    //     if (child.nodeType === 3) {
-    //         where.removeChild(child);
-    //         i--;
-    //     }
-    //     if (child.childNodes.length > 0) {
-    //         deleteTextNodesRecursive(child);
-    //     }
-    // }
 }
 
 /*
