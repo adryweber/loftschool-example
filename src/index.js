@@ -104,16 +104,10 @@ function findError(where) {
 function deleteTextNodes(where) {
     let children = where.childNodes;
 
-    for (let i=0; i<children.length; i++) {
-        let child = children[i];
-    
-        if (child.nodeType === 3) {
-            where.removeChild(child);
-            i = i - 1;
-            continue;
-        }
-        if (child.childNodes.length > 0) {
-            deleteTextNodes(child);
+    for (let i=0; i < children.length; i++) {
+        if (children[i].nodeType === 3) {
+            where.removeChild(children[i]);
+            i--;
         }
     }
 }
@@ -130,6 +124,19 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    let children = where.childNodes;
+
+    for (let i=0; i<children.length; i++) {
+        let child = children[i];
+    
+        if (child.nodeType === 3) {
+            where.removeChild(child);
+            i--;
+        }
+        if (child.childNodes.length > 0) {
+            deleteTextNodesRecursive(child);
+        }
+    }
 }
 
 /*
@@ -152,8 +159,8 @@ function deleteTextNodesRecursive(where) {
      texts: 3
    }
  */
-function collectDOMStat(root) {
-}
+// function collectDOMStat(root) {
+// }
 
 /*
  Задание 8 *:
@@ -187,8 +194,8 @@ function collectDOMStat(root) {
      nodes: [div]
    }
  */
-function observeChildNodes(where, fn) {
-}
+// function observeChildNodes(where, fn) {
+// }
 
 export {
     createDivWithText,
@@ -196,7 +203,7 @@ export {
     findAllPSiblings,
     findError,
     deleteTextNodes,
-    // deleteTextNodesRecursive,
+    deleteTextNodesRecursive,
     // collectDOMStat,
     // observeChildNodes
 };

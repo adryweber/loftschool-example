@@ -6,7 +6,7 @@ import {
     findAllPSiblings,
     findError,
     deleteTextNodes,
-    // deleteTextNodesRecursive,
+    deleteTextNodesRecursive,
     // collectDOMStat,
     // observeChildNodes
 } from '../src/index';
