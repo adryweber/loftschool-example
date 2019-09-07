@@ -51,11 +51,9 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-    let res = [...where.children].filter( child => 
+    return [...where.children].filter( child => 
         child.nextElementSibling && child.nextElementSibling.nodeName === 'P'
     )
-    
-    return res;
 }
 
 /*
@@ -76,9 +74,7 @@ function findAllPSiblings(where) {
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
 function findError(where) {
-    let result = [...where.children].map( child => child.innerText );
-
-    return result;
+    return [...where.children].map( child => child.innerText );
 }
 
 /*
