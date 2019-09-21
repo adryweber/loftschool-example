@@ -9,11 +9,9 @@
    delayPromise(3) // вернет promise, который будет разрешен через 3 секунды
  */
 function delayPromise(seconds) {
-    let promise = new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         setTimeout(() => resolve('done'), seconds * 1000);
     });
-
-    return promise;
 }
 
 /*
@@ -30,7 +28,7 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
-    let promise = new Promise( function(resolve, reject) {
+    let promise = new Promise( function(resolve) {
         let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
         
         var req = new XMLHttpRequest();
@@ -42,11 +40,7 @@ function loadAndSortTowns() {
             let cityes = req.response;
             
             cityes.sort((a, b) => {
-                let nameA = a.name.toLowerCase(), 
-                    nameB = b.name.toLowerCase();
-
-                // eslint-disable-next-line no-nested-ternary
-                return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+                return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
             })
 
             resolve(cityes);
