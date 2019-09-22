@@ -69,7 +69,7 @@ function getCookie () {
 // Рендер таблицы куки
 function renderCookie (cookie) {
     let fragment = document.createDocumentFragment();
-    
+                    
     for (let oneCookie in cookie) {
     
         let tr = document.createElement('tr');
@@ -84,7 +84,6 @@ function renderCookie (cookie) {
         tr.appendChild(tdName);
         tr.appendChild(tdValue);
         tr.appendChild(tdBtn);
-    
         fragment.appendChild(tr);
     }
     listTable.innerHTML = '';
@@ -119,8 +118,8 @@ addButton.addEventListener('click', () => {
     cookie = getCookie(); // обновляем модель
     renderCookie(filterCookie());
 
-    addNameInput.value = '';
-    addValueInput.value = '';
+    // addNameInput.value = '';
+    // addValueInput.value = '';
 });
 
 // Хендлер: Удаление куки
@@ -128,6 +127,9 @@ listTable.addEventListener('click', (e) => {
     if (e.target.className === 'delCookieBtn') {
         document.cookie = `${e.target.id}; max-age=0`;
         cookie = getCookie(); // обновляем модель
+
+        // e.target.parentNode.parentNode.remove();
+        listTable.removeChild(e.target.parentNode.parentNode);
         renderCookie(cookie);
     }
 });
