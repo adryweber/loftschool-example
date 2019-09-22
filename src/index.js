@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 /*
  ДЗ 7 - Создать редактор cookie с возможностью фильтрации
 
@@ -43,10 +44,102 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+// Модель куки
+let cookie = getCookie ();
+
+// Первичная отрисовака таблицы
+renderCookie(cookie);
+
+function isMatching(full, chunk) {
+    if (chunk === '') {
+        return false;
+    }
+
+    full = full.toLowerCase();
+    chunk = chunk.toLowerCase();
+
+    return full.includes(chunk);
+}
+
+// Перегон реальных куки в объект
+function getCookie () {
+    let cookies = document.cookie;
+
+    return cookies.split('; ').reduce( (prev, current) => {
+        const [name, value] = current.split('=');
+        
+        prev[name] = value;
+    
+        return prev;
+    }, {})
+}
+
+// Рендер таблицы куки
+function renderCookie (cookie) {
+    let fragment = document.createDocumentFragment();
+    
+    for (let oneCookie in cookie) {
+    
+        let tr = document.createElement('tr');
+        let tdName = document.createElement('td');
+        let tdValue = document.createElement('td');
+        let tdBtn = document.createElement('td');
+        
+        tdName.innerText = oneCookie;
+        tdValue.innerText = cookie[oneCookie];
+        tdBtn.innerHTML = `<button class='delCookieBtn' id='${oneCookie}=${cookie[oneCookie]}'>удалить</button>`;
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdValue);
+        tr.appendChild(tdBtn);
+    
+        fragment.appendChild(tr);
+    }
+    listTable.innerHTML = '';
+    listTable.appendChild(fragment);
+}
+
+function filterCookie () {
+    let cookieFiltred = {};
+
+    cookieFiltred = Object.keys(cookie).filter( cookieOne =>  
+        (isMatching(cookieOne, filterNameInput.value) || 
+        isMatching(cookie[cookieOne], filterNameInput.value))
+    
+    ).reduce( (prev, current) => {
+        prev[current] = cookie[current];
+        
+        return prev;
+    }, {})
+
+    if ( Object.keys(cookieFiltred).length > 0) {
+        renderCookie(cookieFiltred);
+    } else {
+        renderCookie(cookie);
+    }
+}
+
+// Фильтрация куки
 filterNameInput.addEventListener('keyup', function() {
-    // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    filterCookie();
 });
 
+// Добавление куки
 addButton.addEventListener('click', () => {
-    // здесь можно обработать нажатие на кнопку "добавить cookie"
+    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+    cookie = getCookie(); // обновляем модель
+    filterCookie();
+
+    addNameInput.value = '';
+    addValueInput.value = '';
 });
+
+// Удаление куки
+listTable.addEventListener('click', (e) => {
+    if (e.target.className === 'delCookieBtn') {
+        document.cookie = `${e.target.id}; max-age=0`;
+        cookie = getCookie(); // обновляем модель
+        renderCookie(cookie);
+    }
+});
+
