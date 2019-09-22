@@ -44,12 +44,6 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-// Модель куки
-let cookie = getCookie ();
-
-// Первичная отрисовака таблицы
-renderCookie(cookie);
-
 function isMatching(full, chunk) {
     if (chunk === '') {
         return false;
@@ -63,9 +57,7 @@ function isMatching(full, chunk) {
 
 // Перегон реальных куки в объект
 function getCookie () {
-    let cookies = document.cookie;
-
-    return cookies.split('; ').reduce( (prev, current) => {
+    return document.cookie.split('; ').reduce( (prev, current) => {
         const [name, value] = current.split('=');
         
         prev[name] = value;
@@ -99,42 +91,39 @@ function renderCookie (cookie) {
     listTable.appendChild(fragment);
 }
 
-function filterCookie () {
-    let cookieFiltred = {};
-
-    cookieFiltred = Object.keys(cookie).filter( cookieOne =>  
-        (isMatching(cookieOne, filterNameInput.value) || 
-        isMatching(cookie[cookieOne], filterNameInput.value))
-    
-    ).reduce( (prev, current) => {
-        prev[current] = cookie[current];
+// Если поле фильтра не пустое, отдаем отфильтрованный объект с куками, либо весь объект с куками
+function filterCookie() {
+    if (filterNameInput.value) {
+        return Object.keys(cookie).filter( cookieOne =>  
+            (isMatching(cookieOne, filterNameInput.value) || 
+            isMatching(cookie[cookieOne], filterNameInput.value))
         
-        return prev;
-    }, {})
-
-    if ( Object.keys(cookieFiltred).length > 0) {
-        renderCookie(cookieFiltred);
-    } else {
-        renderCookie(cookie);
-    }
+        ).reduce( (prev, current) => {
+            prev[current] = cookie[current];
+            
+            return prev;
+        }, {})
+    }  
+    
+    return cookie;
 }
 
-// Фильтрация куки
+// Хендлер: Фильтрация куки
 filterNameInput.addEventListener('keyup', function() {
-    filterCookie();
+    renderCookie(filterCookie());
 });
 
-// Добавление куки
+// Хендлер: Добавление куки
 addButton.addEventListener('click', () => {
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
     cookie = getCookie(); // обновляем модель
-    filterCookie();
+    renderCookie(filterCookie());
 
     addNameInput.value = '';
     addValueInput.value = '';
 });
 
-// Удаление куки
+// Хендлер: Удаление куки
 listTable.addEventListener('click', (e) => {
     if (e.target.className === 'delCookieBtn') {
         document.cookie = `${e.target.id}; max-age=0`;
@@ -143,3 +132,8 @@ listTable.addEventListener('click', (e) => {
     }
 });
 
+// Глобальная модель куков
+let cookie = getCookie ();
+
+// Первичная отрисовака таблицы
+renderCookie(cookie);
