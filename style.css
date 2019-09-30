@@ -1,0 +1,151 @@
+/* Корректируем натинвый баллун ******************** */
+
+ymaps .customBalloon { 
+    /* box-shadow: none; */
+    font-size: 15px;
+    font-family: 'Fira Sans', 'Arial', sans-serif;
+    color: #4f4f4f;
+}
+
+/* У контентной зоны меняем маргины и паддинги */
+.customBalloon .ymaps-2-1-74-balloon__content {
+    padding-right: 15px !important;
+    margin-right: 0 !important;
+    width: 100%;
+}
+
+/* Тянем враппер контента на всю ширину */
+.customBalloon .ymaps-2-1-74-balloon__content > ymaps {
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+/* Добавляем скругление */
+.customBalloon .ymaps-2-1-74-balloon__layout {
+    border-radius: 8px;
+}
+
+/* Белый крестик */
+.customBalloon .ymaps-2-1-74-balloon__close-button {
+    display: block;
+    width: 30px;
+    margin-right: 4px;
+    cursor: pointer;
+    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTkwMjMgMy45OTAyM0M0Ljc5MTI5IDMuOTkwMjkgNC41OTY5IDQuMDQ5NjcgNC40MzE4OSA0LjE2MDc4QzQuMjY2ODggNC4yNzE4OSA0LjEzODc1IDQuNDI5NjkgNC4wNjM5IDQuNjE0QzMuOTg5MDQgNC43OTgzMiAzLjk3MDg1IDUuMDAwNzcgNC4wMTE2NSA1LjE5NTQ3QzQuMDUyNDYgNS4zOTAxNyA0LjE1MDQgNS41NjgyOCA0LjI5Mjk2IDUuNzA3MDNMMTAuNTg1OSAxMkw0LjI5Mjk2IDE4LjI5M0M0LjE5Njk5IDE4LjM4NTEgNC4xMjAzNiAxOC40OTU1IDQuMDY3NTggMTguNjE3NkM0LjAxNDggMTguNzM5NyAzLjk4NjkxIDE4Ljg3MTIgMy45ODU1NiAxOS4wMDQyQzMuOTg0MiAxOS4xMzczIDQuMDA5NDEgMTkuMjY5MiA0LjA1OTcgMTkuMzkyNEM0LjEwOTk5IDE5LjUxNTYgNC4xODQzNSAxOS42Mjc1IDQuMjc4NDMgMTkuNzIxNkM0LjM3MjUxIDE5LjgxNTYgNC40ODQ0MSAxOS44OSA0LjYwNzU5IDE5Ljk0MDNDNC43MzA3NiAxOS45OTA2IDQuODYyNzQgMjAuMDE1OCA0Ljk5NTc4IDIwLjAxNDRDNS4xMjg4MiAyMC4wMTMxIDUuMjYwMjUgMTkuOTg1MiA1LjM4MjM4IDE5LjkzMjRDNS41MDQ1MSAxOS44Nzk2IDUuNjE0ODggMTkuODAzIDUuNzA3MDIgMTkuNzA3TDEyIDEzLjQxNDFMMTguMjkzIDE5LjcwN0MxOC4zODUxIDE5LjgwMyAxOC40OTU1IDE5Ljg3OTYgMTguNjE3NiAxOS45MzI0QzE4LjczOTcgMTkuOTg1MiAxOC44NzEyIDIwLjAxMzEgMTkuMDA0MiAyMC4wMTQ0QzE5LjEzNzIgMjAuMDE1OCAxOS4yNjkyIDE5Ljk5MDYgMTkuMzkyNCAxOS45NDAzQzE5LjUxNTYgMTkuODkgMTkuNjI3NSAxOS44MTU3IDE5LjcyMTYgMTkuNzIxNkMxOS44MTU2IDE5LjYyNzUgMTkuODkgMTkuNTE1NiAxOS45NDAzIDE5LjM5MjRDMTkuOTkwNiAxOS4yNjkyIDIwLjAxNTggMTkuMTM3MyAyMC4wMTQ0IDE5LjAwNDJDMjAuMDEzMSAxOC44NzEyIDE5Ljk4NTIgMTguNzM5NyAxOS45MzI0IDE4LjYxNzZDMTkuODc5NiAxOC40OTU1IDE5LjgwMyAxOC4zODUxIDE5LjcwNyAxOC4yOTNMMTMuNDE0MSAxMkwxOS43MDcgNS43MDcwM0MxOS44NTE1IDUuNTY2NTcgMTkuOTUwMiA1LjM4NTczIDE5Ljk5MDIgNS4xODgyMUMyMC4wMzAxIDQuOTkwNjkgMjAuMDA5NSA0Ljc4NTcgMTkuOTMxIDQuNjAwMTJDMTkuODUyNCA0LjQxNDUzIDE5LjcxOTYgNC4yNTcgMTkuNTUgNC4xNDgxN0MxOS4zODA0IDQuMDM5MzUgMTkuMTgxOSAzLjk4NDI5IDE4Ljk4MDUgMy45OTAyM0MxOC43MjA3IDMuOTk3OTggMTguNDc0MSA0LjEwNjU1IDE4LjI5MyA0LjI5Mjk3TDEyIDEwLjU4NTlMNS43MDcwMiA0LjI5Mjk3QzUuNjEzODMgNC4xOTcxNyA1LjUwMjM5IDQuMTIxMDMgNS4zNzkyNyA0LjA2OTAzQzUuMjU2MTYgNC4wMTcwNCA1LjEyMzg3IDMuOTkwMjQgNC45OTAyMyAzLjk5MDIzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==") 50% no-repeat;
+    opacity: .3;
+}
+
+
+
+/*  Список отзывов и форма ******************** */
+.mapReviewWrapper {
+    position: relative;
+    padding: 15px;
+    margin: -25px -30px;
+    min-width: 380px;
+    min-height: 530px;
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+/* Шапка баллуна */ 
+.mapReviewHeader {
+    background-color: #ff8663;
+    border-radius: 8px 8px 0 0;
+    color: white;
+    fill: white;
+    font-size: 12px;
+    font-weight: 300;
+    padding: 15px 15px 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;    
+}
+.mapReviewHeader::before {
+    color: white;
+    fill: white;
+    content: "";
+    display: block;
+    margin-right: 8px;
+    width: 13px;
+    height: 16px;
+    margin-top: 3px;
+    flex: 13px 0 0;
+    background: url(data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJtYXAtbWFya2VyLWFsdCIgY2xhc3M9InN2Zy1pbmxpbmUtLWZhIGZhLW1hcC1tYXJrZXItYWx0IGZhLXctMTIiIHJvbGU9ImltZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMzg0IDUxMiI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xNzIuMjY4IDUwMS42N0MyNi45NyAyOTEuMDMxIDAgMjY5LjQxMyAwIDE5MiAwIDg1Ljk2MSA4NS45NjEgMCAxOTIgMHMxOTIgODUuOTYxIDE5MiAxOTJjMCA3Ny40MTMtMjYuOTcgOTkuMDMxLTE3Mi4yNjggMzA5LjY3LTkuNTM1IDEzLjc3NC0yOS45MyAxMy43NzMtMzkuNDY0IDB6TTE5MiAyNzJjNDQuMTgzIDAgODAtMzUuODE3IDgwLTgwcy0zNS44MTctODAtODAtODAtODAgMzUuODE3LTgwIDgwIDM1LjgxNyA4MCA4MCA4MHoiPjwvcGF0aD48L3N2Zz4=) 0 0  no-repeat;
+}
+
+/* Айтем записи отзыва ******************** */ 
+.mapReviewItem {
+    margin-bottom: 25px;
+}
+
+.mapReview .reviewAttr {
+    font-size: 11px;
+    font-style: italic;
+}
+.mapReviewItem .userName {
+    margin-right: 10px;
+}
+.mapReviewItem .orgName {
+    margin-right: 10px;
+}
+.mapReviewItem .time {
+    color: gray;
+}
+
+.mapReviewItem .reviewText {
+    display: block
+}
+
+
+.mapReviewItems {
+    padding: 15px;
+}
+.mapReview .mapReviewH1 {
+    color: #ff8663;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+
+/* ФОРМА ******************** */ 
+.mapReview_formWrapper {
+    padding: 15px;
+}
+.mapReviewForm {
+    /*height: 330px;*/
+}
+
+.mapReviewForm .form-row {
+    margin-bottom: 15px;
+}
+.mapReviewForm .form-row input, 
+.mapReviewForm .form-row textarea,
+.mapReviewForm .form-row button {
+    border: 1px solid #c4c4c4;
+    border-radius: 16px;
+    padding: 10px 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.mapReviewForm .form-row .mapReviewFormSubmit {
+    background-color: #ff8663;
+    color: white;
+    border: 0;
+    width: auto;
+    margin-bottom: 30px;
+    float: right;
+}
+
+.mapReviewForm .form-row input:focus, 
+.mapReviewForm .form-row textarea:focus,
+.mapReviewForm .form-row button:focus {
+    outline: 0;
+    border-color: #ff8663;
+    box-shadow: 2px 2px 2px grey;
+}
