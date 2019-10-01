@@ -71,9 +71,11 @@ function init() {
     // + По клику на место на карте открываем кастомный баллон с формой (создание первого отзыва)
     // balloonTemp(coords);
     myMap.events.add('click', function (e) {
-        if (balloon) { // здесь balloon.isOpen() не сработает, т.к. это кастомный баллон?
+        if (balloon) { // закрываем кастомный баллун, если он открыт. здесь balloon.isOpen() не сработает, т.к. это кастомный баллон?
             balloon.close();
         }
+
+        myMap.balloon.close(); // закрываем стандартный баллон карусели 
 
         let coords = e.get('coords');
 
@@ -86,9 +88,14 @@ function init() {
         let target = e.get('target');
         let coords = target.geometry._coordinates; // берем координаты объекта (метки) e.get('coords'); 
         let source = 'fromPlacemark';
+        
+        if (balloon) { // закрываем кастомный баллун, если он открыт
+            balloon.close();
+        }
 
         if (!target.getGeoObjects) { // отфильтровываем клик по метке кластера
             myMap.balloon.close();
+            // target.options.set('visible', false); // если нужно скрывать метку при открытии кастомного баллуна
             balloonTemp(coords, source);
         }
     });
@@ -97,11 +104,16 @@ function init() {
     // balloonTemp(coords, flag);
     document.addEventListener('click', function (e) {
         if (e.target.className === 'linkCoords') {
+            if (balloon) { // закрываем кастомный баллун, если он открыт
+                balloon.close();
+            }            
+
+            myMap.balloon.close(); // закрываем стандартный баллон карусели 
+
             let arrCoord = e.target.dataset.coords.split(',');
             let coords = [Number(arrCoord[0]), Number(arrCoord[1])];
             let source = 'fromCarusel';
 
-            myMap.balloon.close(); // закрываем стандартный баллон карусели 
             balloonTemp(coords, source);
         }
     });
@@ -190,6 +202,7 @@ function init() {
                         balloonContentFooter: dateStamp(d),
                     }, 
                     {
+                        hideIconOnBalloonOpen: false,
                         hasBalloon: false // что бы при клике на метку не открывался её стандартный баллун
                     });
 
