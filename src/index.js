@@ -3,8 +3,8 @@ ymaps.ready(init);
 // Шаблоны верстки 
 
 // Шаблон отображения времени
-function dateStamp (d) {
-    return `${d.getDate()}.${d.getMonth()}.${d.getFullYear()} ${d.getHours()}.${d.getMinutes()}`;
+function dateStamp(d) {
+    return `${d.date}.${d.month}.${d.year} ${d.hours}.${d.min}`;
 }
 
 // Шаблон формы и места для списка отзывов
@@ -29,13 +29,13 @@ function formMaket(geoAdress) {
 
 // Шаблон одного отзыва в списке
 // контейнер и его класс создается программно ниже по коду <div class='mapReviewItem'>
-function oneReview ({ d, name, point, message }) {
+function oneReview ({ date, name, point, message }) {
     return `
         <div class='reviewText'>${message}</div>
         <div class='reviewAttr'>
             <span class='orgName'>Место: ${point}</span>
             <span class='userName'>Автор: ${name}</span>
-           <span class='time'>${dateStamp(d)}</span>
+           <span class='time'>${dateStamp(date)}</span>
         </div>
     `;
 }
@@ -51,9 +51,16 @@ function oneReviewOnPoint ({ name, coords, message }) {
 
 function init() {
     let myMap, clusterer, balloon;
-    let allReviews = {};
-    let count = 0;
+    let allReviews;
     let d = new Date();
+
+    let date = {
+        date: d.getDate(),
+        month: d.getMonth(),
+        year: d.getFullYear(),
+        hours: d.getHours(),
+        min: d.getMinutes()
+    };
 
     myMap = new ymaps.Map('map', {
         center: [55.76, 37.64],
@@ -66,9 +73,38 @@ function init() {
         clusterBalloonContentLayout: 'cluster#balloonCarousel'
     });
 
+    // Блок кода восстановление меток из локалсторадж
+    allReviews = JSON.parse(localStorage.getItem('allReviews'));
+
+    if (allReviews) {
+        allReviews.forEach(
+            item => {
+                let coords = item.coords,
+                    point = item.point, 
+                    name = item.name, 
+                    date = item.date,
+                    message = point.message   
+    
+                let Placemark = new ymaps.Placemark(coords, { 
+                    balloonContentHeader: `<b>${point}</b>`, 
+                    balloonContentBody: oneReviewOnPoint({ name, coords, message }),
+                    balloonContentFooter: dateStamp(date)
+                }, 
+                {
+                    hideIconOnBalloonOpen: false,
+                    hasBalloon: false
+                });
+    
+                clusterer.add(Placemark);
+            }
+        );
+    } else {
+        allReviews = [];
+    }
+
     myMap.geoObjects.add(clusterer);
 
-    // + По клику на место на карте открываем кастомный баллон с формой (создание первого отзыва)
+    // + По клику на место на карте открываем кастомный баллон с формой (создание первого отзыва для этой точки)
     // balloonTemp(coords);
     myMap.events.add('click', function (e) {
         if (balloon) { // закрываем кастомный баллун, если он открыт. здесь balloon.isOpen() не сработает, т.к. это кастомный баллон?
@@ -122,16 +158,11 @@ function init() {
     function balloonTemp(coords, source) {
         let reviewsInBalloon = []; // сколько отзывов в текущем баллуне нужно показать  reviewsInBalloon
 
-        // Если был клик не на пустом месте построением баллуна наполняем reviewsInBalloon отзывами 
-        // у которых координаты совпадают с объектом клика
+        // Если был клик на объекте, на котором уже оставляли отзывы их нужно показать. 
+        // Для этого отфильтровываем из обхего хранилища отзывов, отзывы с коородинатами объекта клика.
         if (source) {
-            for (let key in allReviews) {
-                if (allReviews.hasOwnProperty(key) && 
-                    JSON.stringify(allReviews[key].coords) === JSON.stringify(coords)) { 
-                    
-                    reviewsInBalloon.push(allReviews[key]);
-                }
-            }
+            reviewsInBalloon = allReviews.filter(
+                item => JSON.stringify(item.coords) === JSON.stringify(coords));
         } 
 
         ymaps.geocode(coords).then(function(res) {
@@ -150,7 +181,7 @@ function init() {
                     let that = this;
                     const mapReviewItems = document.querySelector('.mapReviewItems');
 
-                    // + Выводим уже имеющиеся отзывы (если есть) в панели над формой
+                    // + Выводим уже имеющиеся отзывы (если есть) в списке над формой
                     if (reviewsInBalloon.length > 0) {
                         for (const key in reviewsInBalloon) {
                             if (reviewsInBalloon.hasOwnProperty(key)) {
@@ -173,7 +204,7 @@ function init() {
                         const div = document.createElement('div');
 
                         div.classList.add('mapReviewItem');
-                        div.innerHTML = oneReview({ d, name, point, message });
+                        div.innerHTML = oneReview({ date, name, point, message });
                         mapReviewItems.appendChild(div);
 
                         that._addPlacemark(name, point, message);
@@ -188,18 +219,23 @@ function init() {
                 _addPlacemark: function (name, point, message) {
                     // В глобальный объект добавляем запись о новой метке 
                     // (что бы потом можно было выводить имеющиеся отзывы)
-                    allReviews[count++] = {
+
+                    allReviews.push({
                         coords: coords,
+                        point: point,
                         name: name,
-                        date: d.toString(),
-                        message: oneReview ({ d, name, point, message })
-                    }
+                        date: date,
+                        message: oneReview({ date, name, point, message })
+                    })
+
+                    localStorage.removeItem('allReviews');
+                    localStorage.setItem('allReviews', JSON.stringify(allReviews)); //  JSON.stringify(
 
                     let Placemark = new ymaps.Placemark(coords, { 
                         // Здесь формируем описание, которое будет выведено в стандартной карусели кластера
                         balloonContentHeader: `<b>${point}</b>`, 
                         balloonContentBody: oneReviewOnPoint({ name, coords, message }),
-                        balloonContentFooter: dateStamp(d),
+                        balloonContentFooter: dateStamp(date),
                     }, 
                     {
                         hideIconOnBalloonOpen: false,
@@ -214,7 +250,7 @@ function init() {
             balloon = new ymaps.Balloon(myMap, {
                 contentLayout: BalloonContentLayout,
                 minHeight: 300
-            });             
+            });
 
             balloon.options.setParent(myMap.options);
             balloon.open(coords);

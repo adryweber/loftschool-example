@@ -101,6 +101,8 @@ ymaps .customBalloon {
 
 .mapReviewItems {
     padding: 15px;
+    height: 140px;
+    overflow: scroll;
 }
 .mapReview .mapReviewH1 {
     color: #ff8663;
